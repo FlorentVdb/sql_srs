@@ -18,6 +18,7 @@ if "exercises_sql_tables.duckdb" not in os.listdir("data"):
 
 con = duckdb.connect(database="data/exercises_sql_tables.duckdb", read_only=False)
 
+
 def check_users_solution(user_query: str) -> None:
     """
     Check that user SQL query is correct by checking:
@@ -42,6 +43,7 @@ def check_users_solution(user_query: str) -> None:
         st.write(
             f"result has a {n_lines_differences} lines difference with the solution"
         )
+
 
 st.write(
     """
@@ -88,10 +90,12 @@ if query:
 for n_days in (2, 7, 21):
     if st.button(f"Revoir dans {n_days} jours"):
         next_review = date.today() + timedelta(days=n_days)
-        con.execute(f"UPDATE memory_state SET last_reviewed = '{next_review}' WHERE exercise_name = '{exercise_name}'")
+        con.execute(
+            f"UPDATE memory_state SET last_reviewed = '{next_review}' WHERE exercise_name = '{exercise_name}'"
+        )
         st.rerun()
 
-if st.button('Reset'):
+if st.button("Reset"):
     con.execute(f"UPDATE memory_state SET last_reviewed = '1970-01-01'")
     st.rerun()
 
