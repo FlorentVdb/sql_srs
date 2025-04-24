@@ -40,10 +40,3 @@ Muffin,3
 
 food_items = pd.read_csv(io.StringIO(CSV2))
 con.execute("CREATE TABLE IF NOT EXISTS food_items AS SELECT * FROM food_items")
-
-ANSWER_STR = """
-SELECT * FROM beverages
-CROSS JOIN food_items
-"""
-answer = pd.read_csv(io.StringIO(ANSWER_STR))
-con.execute("CREATE TABLE IF NOT EXISTS answer AS SELECT * FROM answer")
