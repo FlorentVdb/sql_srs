@@ -1,8 +1,18 @@
 #pylint: disable=missing-module-docstring
 import ast
 
+import os
+import logging
 import duckdb
 import streamlit as st
+
+if "data" not in os.listdir():
+    logging.error(os.listdir())
+    logging.debug("creating folder data")
+    os.mkdir("data")
+
+if "exercises_sql_tables.duckdb" not in os.listdir("data"):
+    exec(open("init_db.py").read())
 
 con = duckdb.connect(database="data/exercises_sql_tables.duckdb", read_only=False)
 
@@ -22,7 +32,7 @@ with st.sidebar:
     )
     st.write("You selected:", theme)
 
-    exercise = con.execute(f"SELECT * FROM memory_state WHERE theme = '{theme}'").df()
+    exercise = con.execute(f"SELECT * FROM memory_state WHERE theme = '{theme}'").df().sort_values("last_reviewed").reset_index()
     st.write(exercise)
 
     exercise_name = exercise.loc[0, "exercise_name"]
@@ -58,7 +68,7 @@ tab2, tab3 = st.tabs(["Tables", "Solution"])
 
 
 with tab2:
-    exercise_tables = ast.literal_eval(exercise.loc[0, "table"])
+    exercise_tables = exercise.loc[0, "table"]
     for tab in exercise_tables:
         st.write(f"table: {tab}")
         df_table = con.execute(f"SELECT * FROM {tab}").df()
