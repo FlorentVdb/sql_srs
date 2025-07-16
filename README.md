@@ -1,1 +1,1 @@
-Application Streamlit permettant de revoir vos notions SQL via un système de cards
+Application Streamlit construite dans le cadre de la formation Data-Upskilling permettant de revoir vos notions SQL
